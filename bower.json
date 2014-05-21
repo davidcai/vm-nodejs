@@ -1,0 +1,10 @@
+{
+  "name": "myproject",
+  "version": "0.0.0",
+  "authors": [
+    "davidcai <w.david.cai@gmail.com>"
+  ],
+  "description": "My project",
+  "license": "MIT",
+  "private": true
+}
