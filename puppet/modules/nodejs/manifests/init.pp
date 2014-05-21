@@ -43,13 +43,15 @@ class nodejs(
           before => Anchor['nodejs::repo'],
         }
 
-        apt::ppa { 'ppa:chris-lea/node.js-devel':
-          before => Anchor['nodejs::repo'],
+        if $dev_package {
+            apt::ppa { 'ppa:chris-lea/node.js-devel':
+              before => Anchor['nodejs::repo'],
+            }
         }
       }
     }
 
-    'Fedora', 'RedHat', 'CentOS', 'OEL', 'OracleLinux', 'Amazon': {
+    'Fedora', 'RedHat', 'Scientific', 'CentOS', 'OEL', 'OracleLinux', 'Amazon': {
       if $manage_repo {
         package { 'nodejs-stable-release':
           ensure => absent,
@@ -75,6 +77,10 @@ class nodejs(
       }
     }
 
+    'Gentoo': {
+      # Gentoo does not need any special repos for nodejs
+    }
+
     default: {
       fail("Class nodejs does not support ${::operatingsystem}")
     }
@@ -89,13 +95,29 @@ class nodejs(
     require => Anchor['nodejs::repo']
   }
 
-  if $::operatingsystem != 'ubuntu' {
-    # The PPA we are using on Ubuntu includes NPM in the nodejs package, hence
-    # we must not install it separately
-    package { 'npm':
-      name    => $nodejs::params::npm_pkg,
-      ensure  => present,
-      require => Anchor['nodejs::repo']
+  case $::operatingsystem {
+    'Ubuntu': {
+      # The PPA we are using on Ubuntu includes NPM in the nodejs package, hence
+      # we must not install it separately
+    }
+
+    'Gentoo': {
+      # Gentoo installes npm with the nodejs package when configured properly.
+      # We use the gentoo/portage module since it is expected to be
+      # available on all gentoo installs.
+      package_use { $nodejs::params::node_pkg:
+        ensure  => present,
+        use     => 'npm',
+        require => Anchor['nodejs::repo'],
+      }
+    }
+
+    default: {
+      package { 'npm':
+        name    => $nodejs::params::npm_pkg,
+        ensure  => present,
+        require => Anchor['nodejs::repo']
+      }
     }
   }
 

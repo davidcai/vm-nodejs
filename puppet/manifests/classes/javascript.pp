@@ -16,7 +16,7 @@ class javascript {
     }
 
     package { 'bower':
-        provider => npm,
+        provider => 'npm',
         ensure => installed,
         require => Class['nodejs']
     }
