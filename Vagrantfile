@@ -10,7 +10,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "hashicorp/precise64"
+  config.vm.box = "hashicorp/precise32"
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
@@ -24,6 +24,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # config.vm.network :forwarded_port, guest: 28017, host: 28017  # mongodb
   config.vm.network :forwarded_port, guest: 3000, host: 3000 # node.js
+  config.vm.network :forwarded_port, guest: 5000, host: 5000 # Heroku foreman
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.

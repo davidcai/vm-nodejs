@@ -46,6 +46,7 @@ Thumbs.db
 node_modules/
 bower_components/
 lib/
+vendor/
 
 # Tool generated files #
 ########################
